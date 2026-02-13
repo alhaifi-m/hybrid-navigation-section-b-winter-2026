@@ -11,14 +11,14 @@ const Home = () => {
       <Text style={styles.p}>Quick Overview for Today</Text>
       <AppCard
         title="Upcoming Deadline"
-        subtitle="Quick Overview for today"
-     right={
+        subtitle="CPRG-216 Assignment due Friday"
+        right={
           <Ionicons
             name="alert-circle-outline"
             size={22}
             color={theme.colors.primary}
           />
-     }
+        }
       />
     </View>
   );

@@ -1,26 +1,24 @@
-import { StyleSheet, Text, View } from "react-native";
-import { theme } from "@/styles/theme";
 import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { theme } from "../styles/theme";
 
-type AppCardProps = {
+type Props = {
   title: string;
   subtitle?: string;
   right?: React.ReactNode;
 };
-
-const AppCard = ({ title, subtitle, right }: AppCardProps) => {
+// React.ReactNode is a TypeScript type that means: "anything React can render."
+export default function AppCard({ title, subtitle, right }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.textWrap}>
         <Text style={styles.title}>{title}</Text>
-        { subtitle? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-
+        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
       </View>
+      {right ? <View>{right}</View> : null}
     </View>
   );
-};
-
-export default AppCard;
+}
 
 const styles = StyleSheet.create({
   card: {
@@ -34,18 +32,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: theme.spacing.gap,
   },
-  textWrap:{
-    flex:1,
+  textWrap: {
+    flex: 1,
     paddingRight: 12,
   },
   title: {
     fontSize: 16,
     fontWeight: "700",
-    color: theme.colors.text
+    color: theme.colors.text,
   },
   subtitle: {
     marginTop: 4,
     fontSize: 13,
-    color: theme.colors.muted
-  }
+    color: theme.colors.muted,
+  },
 });
