@@ -20,6 +20,17 @@ const Home = () => {
           />
         }
       />
+      <AppCard
+        title="Attendance"
+        subtitle="You attended 3/4 classes this week"
+        right={
+          <Ionicons
+            name="checkmark-circle-outline"
+            size={22}
+            color={theme.colors.primary}
+          />
+        }
+      />
     </View>
   );
 };
