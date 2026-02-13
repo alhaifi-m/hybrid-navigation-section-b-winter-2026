@@ -1,0 +1,45 @@
+import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import AppCard from "@/components/app-card";
+import { theme } from "@/styles/theme";
+import React from "react";
+
+const Home = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Campus Hub</Text>
+      <Text style={styles.p}>Quick Overview for Today</Text>
+      <AppCard
+        title="Upcoming Deadline"
+        subtitle="Quick Overview for today"
+     right={
+          <Ionicons
+            name="alert-circle-outline"
+            size={22}
+            color={theme.colors.primary}
+          />
+     }
+      />
+    </View>
+  );
+};
+
+export default Home;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: theme.spacing.screen,
+    backgroundColor: theme.colors.bg,
+  },
+  header: {
+    fontSize: 28,
+    fontWeight: 800,
+    color: theme.colors.text,
+  },
+  p: {
+    marginTop: 6,
+    marginBottom: 16,
+    color: theme.colors.muted,
+  },
+});
