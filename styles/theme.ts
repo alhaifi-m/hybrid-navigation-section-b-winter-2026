@@ -5,7 +5,8 @@ export const theme = {
         text:"#111827",
         muted: "#6b7280",
         primary:"#2563eb",
-        border:"#e5e7eb"
+        border:"#e5e7eb",
+        error:"#dc2626",
     },
     spacing: {
         screen: 20,
@@ -14,5 +15,6 @@ export const theme = {
     },
     radius: {
         card: 14,
+        input: 8,
     }
 }
