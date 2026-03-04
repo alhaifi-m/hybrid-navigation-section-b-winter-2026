@@ -2,7 +2,6 @@ import {
   Alert,
   StyleSheet,
   Text,
-  View,
   ScrollView,
   TextInput,
   Pressable,
@@ -164,7 +163,6 @@ const Profile = () => {
 
       <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
         <Text style={styles.buttonText}>Save Profile</Text>
-
       </Pressable>
     </ScrollView>
   );
@@ -214,11 +212,11 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.input,
     padding: 16,
     alignItems: "center",
-    marginTop: 28
+    marginTop: 28,
   },
   buttonText: {
-    color:"#ffffff",
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: "700"
-  }
+    fontWeight: "700",
+  },
 });
