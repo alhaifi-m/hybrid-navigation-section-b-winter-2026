@@ -2,9 +2,9 @@ import {
   Alert,
   StyleSheet,
   Text,
-  View,
   ScrollView,
   TextInput,
+  Pressable,
 } from "react-native";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -80,6 +80,90 @@ const Profile = () => {
           />
         )}
       />
+      {errors.firstName && (
+        <Text style={styles.error}>{errors.firstName.message}</Text>
+      )}
+
+      {/* Last Name */}
+      <Text style={styles.label}>Last Name</Text>
+      <Controller
+        control={control}
+        name="lastName"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.lastName && styles.inputError]}
+            placeholder="e.g Smith"
+            placeholderTextColor={theme.colors.muted}
+            value={value}
+            onChangeText={onChange}
+            autoCapitalize="words"
+          />
+        )}
+      />
+      {errors.lastName && (
+        <Text style={styles.error}>{errors.lastName.message}</Text>
+      )}
+
+      {/* Email*/}
+      <Text style={styles.label}>Email</Text>
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.email && styles.inputError]}
+            placeholder="example@example.com"
+            placeholderTextColor={theme.colors.muted}
+            value={value}
+            onChangeText={onChange}
+            autoCapitalize="words"
+          />
+        )}
+      />
+      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+
+      {/* Phone */}
+      <Text style={styles.label}>Phone Number</Text>
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.firstName && styles.inputError]}
+            placeholder="e.g (403) 555-123"
+            placeholderTextColor={theme.colors.muted}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="phone-pad"
+          />
+        )}
+      />
+      {errors.phone && <Text style={styles.error}>{errors.phone.message}</Text>}
+
+      {/* Student ID */}
+      <Text style={styles.label}>Student ID</Text>
+      <Controller
+        control={control}
+        name="studentId"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.studentId && styles.inputError]}
+            placeholder="e.g Jane"
+            placeholderTextColor={theme.colors.muted}
+            value={value}
+            onChangeText={onChange}
+            autoCapitalize="characters"
+            maxLength={9}
+          />
+        )}
+      />
+      {errors.firstName && (
+        <Text style={styles.error}>{errors.firstName.message}</Text>
+      )}
+
+      <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
+        <Text style={styles.buttonText}>Save Profile</Text>
+      </Pressable>
     </ScrollView>
   );
 };
@@ -117,5 +201,22 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: theme.colors.error,
+  },
+  error: {
+    color: theme.colors.error,
+    fontSize: 13,
+    marginTop: 4,
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.radius.input,
+    padding: 16,
+    alignItems: "center",
+    marginTop: 28,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });
