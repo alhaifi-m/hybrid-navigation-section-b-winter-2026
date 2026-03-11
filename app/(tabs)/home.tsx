@@ -1,10 +1,47 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import AppCard from "@/components/app-card";
 import { theme } from "@/styles/theme";
-import React from "react";
+import * as api from "@/lib/api";
 
 const Home = () => {
+  const [data, setData] = useState<api.DashboardData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // reusable fetch function
+
+  async function loadDashboard() {
+    try {
+      setError(null);
+      setIsLoading(true);
+      const result = await api.getDashboard();
+      setData(result);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Something went Wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  if(isLoading){
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size={"large"} color={theme.colors.primary}/>
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Campus Hub</Text>
@@ -42,6 +79,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: theme.spacing.screen,
     backgroundColor: theme.colors.bg,
+  },
+  centered: {
+    flex: 1,
+    padding: theme.spacing.screen,
+    backgroundColor: theme.colors.bg,
+    justifyContent:"center",
+    alignItems:"center"
   },
   header: {
     fontSize: 28,
