@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AppCard from "@/components/app-card";
 import { theme } from "@/styles/theme";
 import * as api from "@/lib/api";
+import { symbol } from "zod";
 
 const Home = () => {
   const [data, setData] = useState<api.DashboardData | null>(null);
@@ -39,6 +40,24 @@ const Home = () => {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size={"large"} color={theme.colors.primary}/>
+      </View>
+    )
+  }
+
+  if(error){
+    return (
+      <View style={styles.centered}>
+        <Ionicons 
+      name="cloud-offline-outline"
+      size={48}
+      color={theme.colors.muted}
+        />
+        <Text style={styles.errorText}>{error}</Text>
+        <Pressable style={styles.retryButton} onPress={loadDashboard}>
+          <Text style={styles.retryText}>Try Again</Text>
+
+        </Pressable>
+
       </View>
     )
   }
@@ -97,4 +116,23 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: theme.colors.muted,
   },
+
+  errorText:{
+    marginTop: 12,
+    fontSize: 16,
+    color: theme.colors.muted,
+    textAlign: "center"
+  },
+  retryButton: {
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: theme.radius.input,
+    backgroundColor: theme.colors.primary,
+  },
+  retryText:{
+    color:"#ffffff",
+    fontSize: 16,
+    fontWeight: "700"
+  }
 });
