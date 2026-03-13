@@ -64,10 +64,10 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Campus Hub</Text>
-      <Text style={styles.p}>Quick Overview for Today</Text>
+      <Text style={styles.p}>{data?.greeting} - Quick Overview for Today</Text>
       <AppCard
         title="Upcoming Deadline"
-        subtitle="CPRG-216 Assignment due Friday"
+        subtitle={`${data?.nextDeadline.course} ${data?.nextDeadline.title} - due ${data?.nextDeadline.dueDate}`}
         right={
           <Ionicons
             name="alert-circle-outline"
@@ -78,7 +78,7 @@ const Home = () => {
       />
       <AppCard
         title="Attendance"
-        subtitle="You attended 3/4 classes this week"
+        subtitle={`${data?.attendance.attended}/${data?.attendance.total} classes ${data?.attendance.percentage}`}
         right={
           <Ionicons
             name="checkmark-circle-outline"

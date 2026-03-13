@@ -24,7 +24,7 @@ export type DashboardData = {
 
 }
 
-const delay = (ms: number = 8000): Promise<void> => {
+const delay = (ms: number = 4000): Promise<void> => {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
