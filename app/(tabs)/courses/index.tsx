@@ -20,49 +20,73 @@ const CoursesList = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function loadCourses(){
+  async function loadCourses() {
     try {
-      setError(null)
-      setIsLoading(true)
-      const result = await api.getCourses()
-      setCourses(result)
-
+      setError(null);
+      setIsLoading(true);
+      const result = await api.getCourses();
+      setCourses(result);
     } catch (error) {
-      setError( error instanceof Error ? error.message : "Something went wrong")
+      setError(error instanceof Error ? error.message : "Something went wrong");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function handleRefresh() {
     try {
-      setRefreshing(true)
-      setError(null)
-      const result = await api.getCourses()
-      setCourses(result)
-      
+      setRefreshing(true);
+      setError(null);
+      const result = await api.getCourses();
+      setCourses(result);
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Something went wrong")
+      setError(error instanceof Error ? error.message : "Something went wrong");
     } finally {
-      setRefreshing(false)
+      setRefreshing(false);
     }
   }
 
-  useEffect(()=>{
-    loadCourses()
-  },[])
-  
+  useEffect(() => {
+    loadCourses();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
+
+  if(error){
+      <View style={styles.centered}>
+            <Ionicons
+              name="cloud-offline-outline"
+              size={48}
+              color={theme.colors.muted}
+            />
+            <Text style={styles.errorText}>{error}</Text>
+            <Pressable style={styles.retryButton} onPress={loadCourses}>
+              <Text style={styles.retryText}>Try Again</Text>
+            </Pressable>
+          </View>
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.h1}>Your Courses</Text>
       <FlatList
-        data={COURSES}
+        data={courses}
         keyExtractor={(item) => item.id}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>No Courses found</Text>
+        }
         renderItem={({ item }) => (
           <Pressable onPress={() => router.push(`/(tabs)/courses/${item.id}`)}>
             <AppCard
               title={item.title}
-              subtitle={item.subtitle}
+              subtitle={`${item.title} - ${item.instructor}`}
               right={
                 <Ionicons
                   name="chevron-forward"
@@ -92,4 +116,34 @@ const styles = StyleSheet.create({
     margin: 12,
     color: theme.colors.text,
   },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems:"center",
+    backgroundColor: theme.colors.bg,
+    padding: theme.spacing.screen
+  },
+  errorText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: theme.colors.muted,
+    textAlign: "center",
+  },
+  retryButton: {
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: theme.radius.input,
+    backgroundColor: theme.colors.primary,
+  },
+  retryText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  emptyText: {
+    textAlign: "center",
+    color: theme.colors.muted,
+    fontSize: 15
+  }
 });

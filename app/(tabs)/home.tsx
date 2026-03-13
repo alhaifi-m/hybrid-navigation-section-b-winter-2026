@@ -36,30 +36,28 @@ const Home = () => {
     loadDashboard();
   }, []);
 
-  if(isLoading){
+  if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size={"large"} color={theme.colors.primary}/>
+        <ActivityIndicator size={"large"} color={theme.colors.primary} />
       </View>
-    )
+    );
   }
 
-  if(error){
+  if (error) {
     return (
       <View style={styles.centered}>
-        <Ionicons 
-      name="cloud-offline-outline"
-      size={48}
-      color={theme.colors.muted}
+        <Ionicons
+          name="cloud-offline-outline"
+          size={48}
+          color={theme.colors.muted}
         />
         <Text style={styles.errorText}>{error}</Text>
         <Pressable style={styles.retryButton} onPress={loadDashboard}>
           <Text style={styles.retryText}>Try Again</Text>
-
         </Pressable>
-
       </View>
-    )
+    );
   }
   return (
     <View style={styles.container}>
@@ -103,8 +101,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: theme.spacing.screen,
     backgroundColor: theme.colors.bg,
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     fontSize: 28,
@@ -117,11 +115,11 @@ const styles = StyleSheet.create({
     color: theme.colors.muted,
   },
 
-  errorText:{
+  errorText: {
     marginTop: 12,
     fontSize: 16,
     color: theme.colors.muted,
-    textAlign: "center"
+    textAlign: "center",
   },
   retryButton: {
     marginTop: 20,
@@ -130,9 +128,9 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.input,
     backgroundColor: theme.colors.primary,
   },
-  retryText:{
-    color:"#ffffff",
+  retryText: {
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: "700"
-  }
+    fontWeight: "700",
+  },
 });
