@@ -4,6 +4,7 @@ import { string } from 'zod';
 export const STORAGE_KEYS = {
     PROFILE: 'profile',
     NOTIFICATIONS: 'notifications',
+    PROFILE_PHOTO: 'profile_photo', // week 11 update
 } as const;
 
 // Get a value from storage

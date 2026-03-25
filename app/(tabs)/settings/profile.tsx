@@ -1,5 +1,6 @@
 import {
   Alert,
+  Image,
   StyleSheet,
   Text,
   ScrollView,
@@ -9,6 +10,8 @@ import {
   View,
 } from "react-native";
 import { z } from "zod";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import React, { useState, useEffect } from "react";
@@ -43,6 +46,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true); // track loading state while we load saved profile data
   const [isEditing, setIsEditing] = useState(true); // track whether we are in edit mode or view mode
   const [hasSavedData, setHasSavedData] = useState(false); // track wether we have any saved data to determine wiether to show Cancel Button
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
   const {
     control,
     handleSubmit,
@@ -81,10 +85,72 @@ const Profile = () => {
       } else {
         setIsEditing(true);
       }
+
+      // Load save photo URI from async storage
+
+      const savedPhoto = await storage.get<string>(
+        storage.STORAGE_KEYS.PROFILE_PHOTO,
+      );
+      if (savedPhoto !== null) {
+        setPhotoUri(savedPhoto);
+      }
       setIsLoading(false);
     };
     loadProfile();
   }, []);
+
+  const handlePhotoPress = () => {
+    Alert.alert("Pfofile Photo", "Choose a source", [
+      { text: "Take Photo", onPress: () => openPicker("camera") },
+      { text: "Choose from Library", onPress: () => openPicker("library") },
+      { text: "Cancel", style: "cancel" },
+    ]);
+  };
+
+  const openPicker = async (source: "camera" | "library") => {
+    // step1: Request the appropriate permission
+    if (source === "camera") {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Camera access is required to take profile photo. Enable in Settings",
+        );
+        return;
+      }
+    } else {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Photo Library Access is required to choose a profile photo.  Enable in Settings",
+        );
+      }
+    }
+
+    const result =
+      source === "camera"
+        ? await ImagePicker.launchCameraAsync({
+            mediaTypes: "images",
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+          })
+        : await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: "images",
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+          });
+
+    // Handle Cancel
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+      setPhotoUri(uri);
+      await storage.set(storage.STORAGE_KEYS.PROFILE_PHOTO, uri);
+    }
+  };
 
   const onSubmit = async (data: ProfileForm) => {
     // save the validated profile data to local storage
