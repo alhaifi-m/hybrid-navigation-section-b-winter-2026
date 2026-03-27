@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function TabLayout() {
   return (
@@ -25,6 +24,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "book" : "book-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="map"
+        options={{
+          title: "Map",
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "map" : "map-outline"}
               size={size}
               color={color}
             />

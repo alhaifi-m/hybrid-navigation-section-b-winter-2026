@@ -167,6 +167,29 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+  const renderAvatar = () => {
+    return (
+    <View style={styles.avatarSection}>
+      <Pressable onPress={handlePhotoPress} style={styles.avatarContainer}>
+        { photoUri ? (
+          <Image source={{ uri: photoUri }} style={styles.avatar} />
+        ) : (
+          <View style={styles.avatarPlaceholder}>
+            <Ionicons name="person" size={40} color={theme.colors.muted} />
+          </View>
+        )}
+        <View style={styles.cameraBadge}>
+          <Ionicons name="camera" size={14} color="#fff" />
+          </View>
+        </Pressable>
+        <Text style={styles.photoHint}>
+          {photoUri ? "Tap to change photo" : "Tap to add a profile photo"}
+        </Text>
+    </View>
+    );
+  }
+
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -183,6 +206,9 @@ const Profile = () => {
         contentContainerStyle={styles.content}
       >
         <Text style={styles.h1}>MY PROFILE</Text>
+
+        { renderAvatar() }
+
         <View style={styles.profileCard}>
           <View style={styles.profileRow}>
             <Text style={styles.profileLabel}>First Name</Text>
@@ -222,7 +248,7 @@ const Profile = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.h1}>Edit Profile</Text>
-
+      { renderAvatar() }
       {/* First Name */}
       <Text style={styles.label}>First Name</Text>
       <Controller
@@ -461,4 +487,47 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     opacity: 0.5,
   },
+
+  avatarSection: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  avatarContainer: {
+    position: "relative",
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: theme.colors.border,
+  },
+  avatarPlaceholder: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    backgroundColor: theme.colors.card,
+    borderColor: theme.colors.border,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cameraBadge:{
+    position: "absolute",
+    bottom: 2,
+    right: 2,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: theme.colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: theme.colors.bg,
+  },
+  photoHint: {
+    marginTop: 8,
+    fontSize: 13,
+    color: theme.colors.muted,
+  }
 });
