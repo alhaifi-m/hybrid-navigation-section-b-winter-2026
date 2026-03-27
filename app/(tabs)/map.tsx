@@ -75,7 +75,9 @@ const CampusMap = () => {
   const markerRefs = useRef<
     Record<string, React.ComponentRef<typeof Marker> | null>
   >({});
-  const [locationGranted, setLocationGranted] = useState<boolean | null>(false);
+  const [locationGranted, setLocationGranted] = useState<boolean | undefined>(
+    false,
+  );
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(
@@ -139,6 +141,85 @@ const CampusMap = () => {
           <Text style={styles.locationBannerText}>{locationError}</Text>
         </View>
       )}
+
+      {/* Map */}
+      <View style={styles.mapContainer}>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          initialRegion={CAMPUS_CENTER}
+          showsUserLocation={locationGranted}
+          showsMyLocationButton={false}
+        >
+          {CAMPUS_BUILDINGS.map((building) => (
+            <Marker
+              key={building.id}
+              ref={(ref) => {
+                markerRefs.current[building.id] = ref;
+              }}
+              coordinate={building.coordinate}
+              title={building.title}
+              description={building.description}
+              onPress={() => handleBuildingPress(building)}
+            />
+          ))}
+        </MapView>
+
+        <Pressable
+          style={styles.recenterBtn}
+          onPress={() => {
+            mapRef.current?.animateToRegion(CAMPUS_CENTER, 600);
+          }}
+        >
+          <Ionicons name="location" size={22} color={theme.colors.primary} />
+        </Pressable>
+      </View>
+
+      {/* Selected Build deltail Card */}
+
+      {selectedBuilding && (
+        <View style={styles.selectedCard}>
+          <AppCard
+            title={selectedBuilding.title}
+            subtitle={selectedBuilding.description}
+            right={
+              <Pressable onPress={() => setSelectedBuilding(null)}>
+                <Ionicons
+                  name="close-circle-outline"
+                  size={22}
+                  color={theme.colors.muted}
+                />
+              </Pressable>
+            }
+          />
+        </View>
+      )}
+
+{/* Building List */}
+      {
+        <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
+            <Text style={styles.sectionTitle}>Buildings</Text>
+            {
+                CAMPUS_BUILDINGS.map((building)=>(
+                    <Pressable key={building.id} onPress={()=> handleBuildingPress(building)}>
+                        <AppCard 
+                        title={building.title}
+                        subtitle={building.description}
+                        right={
+                            <Ionicons 
+                            name="location-outline"
+                            size={20}
+                            color={theme.colors.primary}
+                            />
+                        }
+                        />
+                    </Pressable>
+                ))
+            }
+
+        </ScrollView>
+
+      }
     </View>
   );
 };
@@ -150,6 +231,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.bg,
   },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.colors.bg,
+  },
   h1: {
     fontSize: 22,
     fontWeight: "800",
@@ -157,12 +244,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.screen,
     paddingTop: theme.spacing.screen,
     paddingBottom: 8,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: theme.colors.bg,
   },
   locationBanner: {
     flexDirection: "row",
@@ -176,10 +257,46 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.input,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    },
-    locationBannerText: {
-        flex: 1,
-        fontSize: 13,
-        color: theme.colors.muted,
-    }
+  },
+  locationBannerText: {
+    flex: 1,
+    fontSize: 13,
+    color: theme.colors.muted,
+  },
+  mapContainer: {
+    height: 420,
+    marginHorizontal: theme.spacing.screen,
+    borderRadius: theme.radius.card,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  map: {
+    flex: 1,
+  },
+  recenterBtn: {
+    position: "absolute",
+    bottom: 12,
+    right: 12,
+    backgroundColor: theme.colors.card,
+    borderRadius: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  selectedCard: {
+    marginHorizontal: theme.spacing.screen,
+    marginTop: 10,
+  },
+  listContainer: {
+    flex: 1,
+    paddingHorizontal: theme.spacing.screen,
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: theme.colors.text,
+    marginTop: 16,
+    marginBottom: 8,
+  },
 });
